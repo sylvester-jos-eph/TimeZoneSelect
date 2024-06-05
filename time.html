@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <h1 style="text-align: center;">TIMEZONE</h1>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Clock Timezone Selector</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Moment Timezone -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .modal-body {
+            background-color: #f8f9fa;
+        }
+        .world-clock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .clock {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .main-clock {
+            font-size: 3rem;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="main-clock" id="main-clock">--:--:--</div>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#timezoneModal" style="display: block; margin: 20px auto;">
+Click To Select Timezone
+</button>
+
+<div class="modal" id="timezoneModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Select Timezone</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <select id="timezone-select" class="form-control mb-3">
+        </select>
+        <div class="world-clock">
+          <div>Current Time:</div>
+          <div class="clock" id="current-time">--:--:--</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    var timezoneSelect = $('#timezone-select');
+    var currentTimeDisplay = $('#current-time');
+    var mainClockDisplay = $('#main-clock');
+    var timezones = moment.tz.names();
+
+    timezones.forEach(function(tz) {
+      timezoneSelect.append($('<option>', {
+        value: tz,
+        text: tz
+      }));
+    });
+    function updateTime() {
+      var selectedTimezone = timezoneSelect.val();
+      if (selectedTimezone) {
+        var currentTime = moment().tz(selectedTimezone).format('YYYY-MM-DD HH:mm:ss');
+        currentTimeDisplay.text(currentTime);
+        mainClockDisplay.text(currentTime);
+      }
+    }
+    timezoneSelect.change(function() {
+      updateTime();
+    });
+    timezoneSelect.val(timezones[0]);
+    updateTime();
+    setInterval(updateTime, 1000);
+  });
+</script>
+
+</body>
+</html>
