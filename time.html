@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <h1 style="text-align: center;">TIMEZONE</h1>
+  <h1 style="text-align: center;">TIMEZONE</h1>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>World Clock Timezone Selector</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <style>
         .modal-header {
             background-color: #007bff;
@@ -39,11 +40,9 @@
 </head>
 <body>
 <div class="main-clock" id="main-clock">--:--:--</div>
-
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#timezoneModal" style="display: block; margin: 20px auto;">
-Click To Select Timezone
+  Open Timezone Selector
 </button>
-
 <div class="modal" id="timezoneModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -72,7 +71,13 @@ Click To Select Timezone
     var currentTimeDisplay = $('#current-time');
     var mainClockDisplay = $('#main-clock');
     var timezones = moment.tz.names();
+    
+    timezoneSelect.select2({
+      placeholder: 'Select a timezone',
+      width: '100%'
+    });
 
+    // Populate the select element with timezone options
     timezones.forEach(function(tz) {
       timezoneSelect.append($('<option>', {
         value: tz,
@@ -87,11 +92,13 @@ Click To Select Timezone
         mainClockDisplay.text(currentTime);
       }
     }
+
     timezoneSelect.change(function() {
       updateTime();
     });
-    timezoneSelect.val(timezones[0]);
-    updateTime();
+
+    timezoneSelect.val(timezones[0]).trigger('change');
+
     setInterval(updateTime, 1000);
   });
 </script>
